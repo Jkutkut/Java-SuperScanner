@@ -116,7 +116,7 @@ public abstract class SuperScanner {
         if (options.length == 0)
             throw new IllegalArgumentException(getErrorNoOptions());
         String str;
-        question += " [" + String.join(", ", options) + "]";
+        question += " [" + String.join(", ", options) + "] ";
         while (true) {
             str = getString(question);
             for (String option : options)
@@ -128,6 +128,18 @@ public abstract class SuperScanner {
 
     protected abstract String getErrorNoOptions();
     protected abstract String getErrorInvalidOption();
+
+    public String getFileName(String question) {
+        String str;
+        while (true) {
+            str = getString(question, 1, Integer.MAX_VALUE);
+            if (new File(str).exists())
+                return str;
+            System.out.println(getErrorFileNotFound());
+        }
+    }
+
+    protected abstract String getErrorFileNotFound();
 
     // ******* Integer ********
     /**
@@ -316,6 +328,11 @@ public abstract class SuperScanner {
         }
 
         @Override
+        protected String getErrorFileNotFound() {
+            return "The file does not exist.";
+        }
+
+        @Override
         protected String getErrorNotInt() {
             return "The value is not a valid integer.";
         }
@@ -401,6 +418,11 @@ public abstract class SuperScanner {
         @Override
         protected String getErrorInvalidOption() {
             return "La opción no es válida.";
+        }
+
+        @Override
+        protected String getErrorFileNotFound() {
+            return "El archivo no existe.";
         }
 
         @Override
